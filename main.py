@@ -10,6 +10,7 @@ class Node:
     def __init__(self, data) -> None:
         self.data = data
         self.next = None
+        self.prev = None
     def __str__(self) -> str:
         return str(self.data)
  
@@ -19,17 +20,27 @@ class DoublyLinkedList:
         self.head = None
     # vložení prvku na začátek, nic nevrací
     def insert_at_begin(self, data):
-        new_node = Node(data)
-        new_node.next = self.head
-        self.head = new_node
+        if self.head is None:
+            new_node = Node(data)
+            new_node.prev = None
+            self.head = new_node
+        else:
+            new_node = Node(data)
+            cur_node = self.head
+            while cur_node.next:
+                cur_node = cur_node.next
+            cur_node.next = new_node    
+            new_node.prev = cur_node
+            new_node.next = None                
+
         
-     
     # smazání prvku na začátku, vrátí se hodnota v tomto prvku
     def delete_at_begin(self):
         if self.head == None:
             return None
         data = self.head.data
         self.head = self.head.next
+
         return data
  
     # převod seznamu na string v dopředném pořadí ve formátu [data1, data2, data3, ...]
@@ -40,10 +51,12 @@ class DoublyLinkedList:
         return result    
     # vrací řetězec str
     def __str__(self):
-        result = " "
-        for i in self:
-            result += str(i) + "->"
-        return result + "None"            
+        cur_node = self.head
+        while cur_node:
+            print(self.head)
+            cur_node = cur_node.next
+
+         
     
     # převod seznamu na string ve zpětném pořadí ve formátu [data3, data2, data1]
     # vrací řetězec str
@@ -55,14 +68,28 @@ class DoublyLinkedList:
 
     # vloží prvek na konec seznamu, nic nevrací
     def insert_at_end(self, data):
-        pass
+        if self.head is None:
+            new_node = Node(data)
+            new_node.prev = None
+            self.head = new_node
+        else:
+            new_node = Node(data)
+            cur_node = self.head
+            while cur_node.next:
+                cur_node = cur_node.next
+            cur_node.next = new_node    
+            new_node.prev = cur_node
+            new_node.next = None                
+
+        
 
     # smaže prvek na konci seznamu, vrací jeho hodnotu
     def delete_at_end(self):
-        pass
+        
 
     # smaže první nalezená data podle hodnoty, nic nevrací
     def delete_data(self, data):
+        while 
         
         
 
