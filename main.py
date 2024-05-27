@@ -93,7 +93,7 @@ class DoublyLinkedList:
 
     # vrací True/False podle toho, zda je seznam prázdný nebo ne
     def empty(self):
-        if self == None:
+        if self.head is None:
             return True
         else:
             return False
