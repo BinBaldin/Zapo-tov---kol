@@ -30,7 +30,6 @@ class DoublyLinkedList:
             self.head.next = self.head
             self.head = new_node    
             new_node.prev = None          
-
         
     # smazání prvku na začátku, vrátí se hodnota v tomto prvku
     def delete_at_begin(self):
@@ -49,10 +48,11 @@ class DoublyLinkedList:
         return result    
     # vrací řetězec str
     def __str__(self):
-        cur_node = self.head
-        while cur_node:
-            print(self.head)
-            cur_node = cur_node.next
+        current_node = self.head
+        while current_node:
+            print(current_node.data, end=" <-> " if current_node.next else "\n")
+            current_node = current_node.next
+
 
          
     
@@ -100,18 +100,33 @@ class DoublyLinkedList:
     
     # smaže celý seznam, nic nevrací
     def clear(self):
-        return self.clear 
+        current_node = self.head
+        while current_node:
+            current_node = None
+            self.head.next = current_node
+             
 
     # vrací True/False podle toho, zda se data nacházejí v seznamu
     def contains(self, data):
-        if data in self:
-            return True
-        else:
-            return False
+        current_node = self.head
+        while current_node:
+            if current_node.data == data:
+                return True
+            current_node = current_node.next
+        return False
 
     # seřadí data v seznamu, parametr asc určuje, zda vzestupně (True) nebo sestupně (False)
-    def sort(self, asc = True, x = min(self), y= max(self)):
-        pivot
+    def sort(self, asc = True):
+        lenght = len(self)
+        if lenght <= 1:
+            return self
+        else:
+            pivot = self.pop()
+            
+
+
+
+
 
 
 # Zde začínají testy
