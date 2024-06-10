@@ -1,112 +1,99 @@
-# Testovací skript pro odevzdání zápočtového úkolu.
-# Vytvoření obousměrného spojového seznamu se zarážkou.
-# Doplňte všechny metody tak, aby to prošlo testy v dolní části souboru.
-# Testy jsou rozděleny na osm levelů, které můžete plnit postupně
 
-LEVEL = 1   # zde postupně měňte číslo od 1 až do 8, čímž si zpřístupníte testy k jednotlivým levelům
 
-# Třída pro buňku seznamu
+LEVEL = 8
+   # zde postupně měňte číslo od 1 až do 8, čímž si zpřístupníte testy k jednotlivým levelům
+
 class Node:
     def __init__(self, data) -> None:
         self.data = data
         self.next = None
         self.prev = None
+
     def __str__(self) -> str:
         return str(self.data)
- 
-# Třída pro celý obousměrný spojový seznam
+
 class DoublyLinkedList:
     def __init__(self):
         self.head = None
-    # vložení prvku na začátek, nic nevrací
+
     def insert_at_begin(self, data):
-        if self.head is None:
-            new_node = Node(data)
-            new_node.prev = None
-            self.head = new_node
-        else:
-            new_node = Node(data)
+        new_node = Node(data)
+        new_node.next = self.head
+        if self.head is not None:
             self.head.prev = new_node
-            self.head.next = self.head
-            self.head = new_node    
-            new_node.prev = None          
-        
-    # smazání prvku na začátku, vrátí se hodnota v tomto prvku
+        self.head = new_node
+
     def delete_at_begin(self):
-        if self.head == None:
+        if self.head is None:
             return None
         data = self.head.data
         self.head = self.head.next
-
+        if self.head is not None:
+            self.head.prev = None
         return data
- 
-    # převod seznamu na string v dopředném pořadí ve formátu [data1, data2, data3, ...]
-    def string_list(self):
-        result = []
-        for i in self:
-            result.append(str(i))
-        return result    
-    # vrací řetězec str
+
     def __str__(self):
         current_node = self.head
+        result = []
         while current_node:
-            print(current_node.data, end=" <-> " if current_node.next else "\n")
+            result.append(str(current_node.data))
             current_node = current_node.next
+        return '[' + ', '.join(result) + ']'
 
-
-         
-    
-    # převod seznamu na string ve zpětném pořadí ve formátu [data3, data2, data1]
-    # vrací řetězec str
     def str_reverse(self):
-        result = " "
-        for i in self:
-            print(i)
-
-
-    # vloží prvek na konec seznamu, nic nevrací
-    def insert_at_end(self, data):
         if self.head is None:
-            new_node = Node(data)
-            new_node.prev = None
-            self.head = new_node
-        else:
-            new_node = Node(data)
-            cur_node = self.head
-            while cur_node.next:
-                cur_node = cur_node.next
-            cur_node.next = new_node    
-            new_node.prev = cur_node
-            new_node.next = None                
-
-        
-
-    # smaže prvek na konci seznamu, vrací jeho hodnotu
-    def delete_at_end(self):
-        
-
-    # smaže první nalezená data podle hodnoty, nic nevrací
-    def delete_data(self, data):
-        while 
-        
-        
-
-    # vrací True/False podle toho, zda je seznam prázdný nebo ne
-    def empty(self):
-        if self.head is None:
-            return True
-        else:
-            return False
-    
-    # smaže celý seznam, nic nevrací
-    def clear(self):
+            return '[]'
         current_node = self.head
+        while current_node.next:
+            current_node = current_node.next
+        result = []
         while current_node:
-            current_node = None
-            self.head.next = current_node
-             
+            result.append(str(current_node.data))
+            current_node = current_node.prev
+        return '[' + ', '.join(result) + ']'
 
-    # vrací True/False podle toho, zda se data nacházejí v seznamu
+    def insert_at_end(self, data):
+        new_node = Node(data)
+        if self.head is None:
+            self.head = new_node
+            return
+        current_node = self.head
+        while current_node.next:
+            current_node = current_node.next
+        current_node.next = new_node
+        new_node.prev = current_node
+
+    def delete_at_end(self):
+        if self.head is None:
+            return None
+        current_node = self.head
+        while current_node.next:
+            current_node = current_node.next
+        if current_node.prev:
+            current_node.prev.next = None
+        else:
+            self.head = None
+        return current_node.data
+
+    def delete_data(self, data):
+        current_node = self.head
+        while current_node and current_node.data != data:
+            current_node = current_node.next
+        if current_node is None:
+            return
+        if current_node.prev:
+            current_node.prev.next = current_node.next
+        if current_node.next:
+            current_node.next.prev = current_node.prev
+        if current_node == self.head:
+            self.head = current_node.next
+
+    def empty(self):
+        return self.head is None
+
+    def clear(self):
+        self.head = None
+
     def contains(self, data):
         current_node = self.head
         while current_node:
@@ -115,17 +102,18 @@ class DoublyLinkedList:
             current_node = current_node.next
         return False
 
-    # seřadí data v seznamu, parametr asc určuje, zda vzestupně (True) nebo sestupně (False)
-    def sort(self, asc = True):
-        lenght = len(self)
-        if lenght <= 1:
-            return self
-        else:
-            pivot = self.pop()
-            
-
-
-
+    def sort(self, asc=True):
+        if self.head is None:
+            return
+        sorted_list = []
+        current_node = self.head
+        while current_node:
+            sorted_list.append(current_node.data)
+            current_node = current_node.next
+        sorted_list.sort(reverse=not asc)
+        self.clear()
+        for data in sorted_list:
+            self.insert_at_end(data)
 
 
 
@@ -143,6 +131,7 @@ if LEVEL >= 1:
 
     dll.insert_at_begin(12)
     dll.insert_at_begin(13)
+    
     assert str(dll) == '[13, 12, 10]'
 
     print("Level 1: OK")
@@ -203,6 +192,7 @@ if LEVEL >= 4:
 
     assert cars.delete_at_begin() == 'toyota'
     assert str(cars) == '[skoda, trabant]'
+    print(cars.str_reverse())
     assert cars.str_reverse() == '[trabant, skoda]'
 
     assert cars.delete_at_end() == 'trabant'
